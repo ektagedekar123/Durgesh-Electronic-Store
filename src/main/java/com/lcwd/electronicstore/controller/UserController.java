@@ -2,17 +2,23 @@ package com.lcwd.electronicstore.controller;
 
 import com.lcwd.electronicstore.helper.AppConstants;
 import com.lcwd.electronicstore.payloads.ApiResponse;
+import com.lcwd.electronicstore.payloads.ImageResponse;
 import com.lcwd.electronicstore.payloads.PageableResponse;
 import com.lcwd.electronicstore.payloads.UserDto;
+import com.lcwd.electronicstore.services.FileService;
 import com.lcwd.electronicstore.services.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.spi.ImageInputStreamSpi;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,6 +29,12 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private FileService fileService;
+
+    @Value("${user.profile.image.path}")
+    private String imageUploadPath;
 
     /**
      * @author Ekta
@@ -122,6 +134,19 @@ public class UserController {
     public ResponseEntity<List<UserDto>> searchUsers(@PathVariable String keywords){
         logger.info("Entering request for searching user with keywords: {}",keywords);
         return new ResponseEntity<>(userService.searchUser(keywords), HttpStatus.OK);
+    }
+
+    @PostMapping("/users/image/{userId}")
+    public ResponseEntity<ImageResponse> uploadImage(@RequestParam("userimage") MultipartFile image,
+                                                     @PathVariable String userId) throws IOException {
+        String imagename = fileService.uploadFile(image, imageUploadPath);
+
+        UserDto userDto = userService.getUserById(userId);
+        userDto.setImagename(imagename);
+        UserDto updatedUser = userService.updateUser(userDto, userId);
+
+        ImageResponse imageResponse=ImageResponse.builder().imagename(imagename).status(HttpStatus.CREATED).success(true).message("File uploaded successfully").build();
+        return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
     }
 
 }
