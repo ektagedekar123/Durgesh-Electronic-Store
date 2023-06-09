@@ -20,6 +20,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public String uploadFile(MultipartFile file, String path) throws IOException {
 
+        logger.info("Initiating service layer to upload image with file: {} & path : {}",file, path);
         String originalFilename = file.getOriginalFilename();
         logger.info("FileName : {}", originalFilename);
 
@@ -38,19 +39,21 @@ public class FileServiceImpl implements FileService {
             }
 
             Files.copy(file.getInputStream(), Paths.get(fullPathWithFileName));
-
+            logger.info("Completed service layer to upload image with file: {} & path : {}",file, path);
             return fileNameWithExtension;
         }else{
             throw new BadApiRequestException("File with this "+extension+" not allowed");
         }
 
+
     }
 
     @Override
     public InputStream getResource(String path, String filename) throws FileNotFoundException {
-
+        logger.info("Initiating service layer to download image with filename: {} & path : {}",filename, path);
         String fullpath = path + File.separator + filename;
         InputStream inputStream=new FileInputStream(fullpath);
+        logger.info("Completed service layer to download image with filename: {} & path : {}",filename, path);
         return inputStream;
     }
 }

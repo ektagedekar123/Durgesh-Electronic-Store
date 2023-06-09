@@ -12,20 +12,24 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.imageio.spi.ImageInputStreamSpi;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
-    Logger logger= LoggerFactory.getLogger(UserController.class);
+    private Logger logger= LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -102,10 +106,10 @@ public class UserController {
      */
     @GetMapping("/users")
     public ResponseEntity<PageableResponse<UserDto>> getAllUsers(
-            @RequestParam(value = "pageNo", defaultValue =  "0", required = false) int pageNo,
-            @RequestParam(value = "pageSize", defaultValue = "10", required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue =  "name", required = false) String sortBy,
-            @RequestParam(value = "sortDir", defaultValue = "asc", required = false) String sortDir
+            @RequestParam(value = "pageNo", defaultValue =  AppConstants.PAGE_NO, required = false) int pageNo,
+            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
+            @RequestParam(value = "sortBy", defaultValue =  AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
 
     ){
         logger.info("Entering request for getting all users");
@@ -139,14 +143,28 @@ public class UserController {
     @PostMapping("/users/image/{userId}")
     public ResponseEntity<ImageResponse> uploadImage(@RequestParam("userimage") MultipartFile image,
                                                      @PathVariable String userId) throws IOException {
+        logger.info("Entering request to upload image with User id: {} & saving image into DB",userId);
         String imagename = fileService.uploadFile(image, imageUploadPath);
 
         UserDto userDto = userService.getUserById(userId);
         userDto.setImagename(imagename);
         UserDto updatedUser = userService.updateUser(userDto, userId);
 
-        ImageResponse imageResponse=ImageResponse.builder().imagename(imagename).status(HttpStatus.CREATED).success(true).message("File uploaded successfully").build();
+        ImageResponse imageResponse=ImageResponse.builder().imagename(imagename).status(HttpStatus.CREATED).success(true).message(AppConstants.FILE_UPLOADED).build();
+        logger.info("Completed request to upload image with User id: {}",userId);
         return new ResponseEntity<>(imageResponse, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/users/image/{userId}")
+    public void serveImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
+        logger.info("Entering request to download image with User id: {}",userId);
+        UserDto userDto = userService.getUserById(userId);
+        logger.info("User image name : {}",userDto.getImagename());
+        InputStream inputStream = fileService.getResource(imageUploadPath, userDto.getImagename());
+
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(inputStream, response.getOutputStream());  // StreamUtils copy data from inputStream to servlet response ie. it will write data to Servlet response
+        logger.info("Completed request to download image with User id: {}",userId);
     }
 
 }
