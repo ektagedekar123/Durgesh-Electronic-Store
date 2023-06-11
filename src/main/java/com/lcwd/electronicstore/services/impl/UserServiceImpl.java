@@ -11,12 +11,19 @@ import lombok.extern.slf4j.Slf4j;
 import lombok.extern.slf4j.XSlf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -33,6 +40,9 @@ public class UserServiceImpl implements UserService {
     
     @Autowired
     private ModelMapper modelMapper;
+
+    @Value("${user.profile.image.path}")
+    private String imagepath;
 
     /**
      * @author Ekta
@@ -97,6 +107,20 @@ public class UserServiceImpl implements UserService {
     public void deleteUser(String userId) {
         log.info("Initiating dao layer for deleting user with user id: {}",userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with id: "+userId));
+
+        // delete User profile image
+        // images/users/abc.png
+        String fullpath= imagepath + user.getImagename();
+       try {
+           Path path = Paths.get(fullpath);
+           Files.delete(path);
+       }catch(NoSuchFileException ex){
+           log.info("User image not found in folder");
+           ex.printStackTrace();
+       }catch(IOException e){
+           e.printStackTrace();
+       }
+
         log.info("Completed dao layer for deleting user with user id: {}",userId);
         userRepository.delete(user);
     }
