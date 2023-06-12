@@ -108,7 +108,7 @@ public class UserController {
     public ResponseEntity<PageableResponse<UserDto>> getAllUsers(
             @RequestParam(value = "pageNo", defaultValue =  AppConstants.PAGE_NO, required = false) int pageNo,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
-            @RequestParam(value = "sortBy", defaultValue =  AppConstants.SORT_BY, required = false) String sortBy,
+            @RequestParam(value = "sortBy", defaultValue =  AppConstants.SORT_BYName, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir
 
     ){

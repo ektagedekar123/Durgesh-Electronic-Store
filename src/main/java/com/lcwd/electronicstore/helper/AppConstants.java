@@ -4,11 +4,13 @@ public class AppConstants {
 
     public static final String USER_DELETE= "User deleted successfully!!";
 
-    public static final String PAGE_NO= "0";
+    public static final String PAGE_NO= "1";
 
     public static final String PAGE_SIZE= "10";
 
-    public static final String SORT_BY= "name";
+    public static final String SORT_BYName= "name";
+
+    public static final String SORT_ByTitle= "title";
 
     public static final String SORT_DIR= "asc";
 
