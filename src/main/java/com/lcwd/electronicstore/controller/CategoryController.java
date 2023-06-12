@@ -23,6 +23,16 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+
+    /**
+     * @author Ekta
+     * @apiNote This method is for creating category
+     * @param categoryDto
+     * @return CategoryDto
+     */
+
+
     @PostMapping("/categories")
     public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto){
         logger.info("Entering request for creating category");
@@ -31,6 +41,13 @@ public class CategoryController {
         return new ResponseEntity<>(dto, HttpStatus.CREATED);
     }
 
+    /**
+     * @author Ekta
+     * @apiNote This method is for updating category
+     * @param dto
+     * @param categoryId
+     * @return CategoryDto
+     */
     @PutMapping("/categories/{categoryId}")
     public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto dto, @PathVariable String categoryId){
         logger.info("Entering request for updating category with category Id: {}",categoryId);
@@ -39,8 +56,15 @@ public class CategoryController {
         return new ResponseEntity<>(categoryDto, HttpStatus.OK);
     }
 
+
+    /**
+     * @author Ekta
+     * @apiNote This mehtod is for deleting Category
+     * @param categoryId
+     * @return ApiResponse
+     */
     @DeleteMapping("/categories/{catId}")
-    public ResponseEntity<ApiResponse> deleteUser(@PathVariable("catId") String categoryId){
+    public ResponseEntity<ApiResponse> deleteCategory(@PathVariable("catId") String categoryId){
         logger.info("Entering request for deleting category with category Id: {}",categoryId);
         categoryService.deleteCategory(categoryId);
         ApiResponse apiResponse = ApiResponse.builder().message(AppConstants.CATEGORY_DELETE).status(HttpStatus.OK).success(true).build();
@@ -48,6 +72,12 @@ public class CategoryController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    /**
+     * @author Ekta
+     * @apiNote This method is for getting single category
+     * @param categoryId
+     * @return CategoryDto
+     */
     @GetMapping("/categories/{categoryId}")
     public ResponseEntity<CategoryDto> getCategory(@PathVariable String categoryId){
         logger.info("Entering request to get single category with category Id: {}",categoryId);
@@ -56,6 +86,15 @@ public class CategoryController {
         return  ResponseEntity.ok(dto);
     }
 
+    /**
+     * @author Ekta
+     * @apiNote This methos is for getting all categories with pagination
+     * @param pageNo
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return PageableResponse<CategoryDto>
+     */
     @GetMapping("/categories")
     public ResponseEntity<PageableResponse<CategoryDto>> getAllCategories(
             @RequestParam(value = "pageNo", defaultValue =  AppConstants.PAGE_NO, required = false) int pageNo,
@@ -68,6 +107,13 @@ public class CategoryController {
         return new ResponseEntity<PageableResponse<CategoryDto>>(categoryService.getAllCategories(pageNo, pageSize, sortBy, sortDir), HttpStatus.OK);
     }
 
+
+    /**
+     * @author Ekta
+     * @apiNote This method is for searching category with keywords
+     * @param keywords
+     * @return List<CategoryDto>
+     */
     @GetMapping("/categories/search/{keywords}")
     public ResponseEntity<List<CategoryDto>> searchCategory(@PathVariable String keywords){
       logger.info("Entering request for searching category with keywords: {}", keywords);
