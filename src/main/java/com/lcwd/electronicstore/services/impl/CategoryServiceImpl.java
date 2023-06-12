@@ -16,6 +16,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Repository
@@ -32,6 +33,8 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto createCategory(CategoryDto categoryDto) {
 
+        String randomId = UUID.randomUUID().toString();
+        categoryDto.setCategoryId(randomId);
         Category category = mapper.map(categoryDto, Category.class);
         Category savedCategory = categoryRepo.save(category);
         return this.mapper.map(savedCategory, CategoryDto.class);
