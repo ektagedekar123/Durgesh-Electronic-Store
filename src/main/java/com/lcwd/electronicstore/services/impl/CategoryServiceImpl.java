@@ -79,13 +79,13 @@ public class CategoryServiceImpl implements CategoryService {
     public PageableResponse<CategoryDto> getAllCategories(int pageNo, int pageSize, String sortBy, String sortDir) {
         log.info("Initiating dao layer to get all categories  with pageNo: {}, pageSize: {}, sortBy: {}, sortDir: {}",pageNo, pageSize, sortBy, sortDir);
         Sort sort = sortDir.equalsIgnoreCase("desc")? Sort.by(sortBy).descending(): Sort.by(sortBy).ascending();
-        log.info("Sort object is created with pageNo: {}, pageSize: {}, sortBy: {}, sortDir: {}",pageNo, pageSize, sortBy, sortDir);
+
         Pageable pageable= PageRequest.of(pageNo-1, pageSize, sort);
 
         Page<Category> categoryPage = categoryRepo.findAll(pageable);
-        log.info("Page object is created with pageNo: {}, pageSize: {}, sortBy: {}, sortDir: {}",pageNo, pageSize, sortBy, sortDir);
+
         PageableResponse<CategoryDto> pageableResponse = PageHelper.getPageableResponse(categoryPage, CategoryDto.class);
-        log.info("Initiating dao layer to get all categories  with pageNo: {}, pageSize: {}, sortBy: {}, sortDir: {}",pageNo, pageSize, sortBy, sortDir);
+        log.info("Completed dao layer to get all categories  with pageNo: {}, pageSize: {}, sortBy: {}, sortDir: {}",pageNo, pageSize, sortBy, sortDir);
         return pageableResponse;
     }
 
