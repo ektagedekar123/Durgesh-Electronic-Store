@@ -2,6 +2,7 @@ package com.lcwd.electronicstore.services.impl;
 
 import com.lcwd.electronicstore.entities.Category;
 import com.lcwd.electronicstore.exception.ResourceNotFoundException;
+import com.lcwd.electronicstore.helper.AppConstants;
 import com.lcwd.electronicstore.helper.PageHelper;
 import com.lcwd.electronicstore.payloads.CategoryDto;
 import com.lcwd.electronicstore.payloads.PageableResponse;
@@ -47,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
         log.info("Initiating dao layer for updating category with categoryId: {}", categoryId);
-        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found Exceptions!!"));
+        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
 
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
@@ -61,7 +62,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(String categoryId) {
         log.info("Initiating dao layer for deleting category with category id: {}",categoryId);
-        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found Exceptions!!"));
+        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
         categoryRepo.delete(category);
         log.info("Completed dao layer for deleting category with category id: {}",categoryId);
     }
@@ -69,7 +70,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategory(String categoryId) {
         log.info("Initiating dao layer to get single category with category id: {}",categoryId);
-        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category not found Exception!!"));
+        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
         log.info("Completed dao layer to get single category with category id: {}",categoryId);
         return this.mapper.map(category, CategoryDto.class);
     }

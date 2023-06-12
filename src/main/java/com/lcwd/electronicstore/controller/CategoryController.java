@@ -43,7 +43,7 @@ public class CategoryController {
     public ResponseEntity<ApiResponse> deleteUser(@PathVariable("catId") String categoryId){
         logger.info("Entering request for deleting category with category Id: {}",categoryId);
         categoryService.deleteCategory(categoryId);
-        ApiResponse apiResponse = ApiResponse.builder().message("Category deleted successfully!!").status(HttpStatus.OK).success(true).build();
+        ApiResponse apiResponse = ApiResponse.builder().message(AppConstants.CATEGORY_DELETE).status(HttpStatus.OK).success(true).build();
         logger.info("Completed request for deleting category with category Id: {}",categoryId);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
