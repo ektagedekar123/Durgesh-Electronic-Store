@@ -5,7 +5,7 @@ import com.lcwd.electronicstore.payloads.PageableResponse;
 
 import java.util.List;
 
-public interface CategoryServiceI {
+public interface CategoryService {
 
     CategoryDto createCategory(CategoryDto categoryDto);
 
@@ -16,7 +16,7 @@ public interface CategoryServiceI {
 
     CategoryDto getCategory(String categoryId);
 
-    PageableResponse<CategoryDto> getAllCategories();
+    PageableResponse<CategoryDto> getAllCategories(int pageNo, int pageSize, String sortBy, String sortDir);
 
     List<CategoryDto> searchCategory(String keywords);
 }
