@@ -2,6 +2,7 @@ package com.lcwd.electronicstore.services.impl;
 
 import com.lcwd.electronicstore.entities.User;
 import com.lcwd.electronicstore.exception.ResourceNotFoundException;
+import com.lcwd.electronicstore.helper.AppConstants;
 import com.lcwd.electronicstore.helper.PageHelper;
 import com.lcwd.electronicstore.payloads.PageableResponse;
 import com.lcwd.electronicstore.payloads.UserDto;
@@ -77,7 +78,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto updateUser(UserDto userDto, String userId) {
         log.info("Initiating dao layer for updating user with user id: {}",userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with id: "+userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND +userId));
 
         user.setName(userDto.getName());
     //    user.setEmail(userDto.getEmail());
@@ -106,7 +107,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUser(String userId) {
         log.info("Initiating dao layer for deleting user with user id: {}",userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with id: "+userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND+userId));
 
         // delete User profile image
         // images/users/abc.png
@@ -165,7 +166,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserById(String userId) {
         log.info("Initiating dao layer for getting single user by userId: {}",userId);
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with id: "+userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOUND+userId));
  //       return entityToDto(user);
         log.info("Completed dao layer for getting single user by userId: {}",userId);
         return this.modelMapper.map(user, UserDto.class);
@@ -180,7 +181,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByEmail(String email) {
         log.info("Initiating dao layer for getting user by email: {}",email);
-        User user = this.userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException("User not found with email id: "+email));
+        User user = this.userRepository.findByEmail(email).orElseThrow(() -> new ResourceNotFoundException(AppConstants.USER_NOT_FOund_WITH_Email+email));
         log.info("Completed dao layer for getting user by email: {}",email);
         return this.modelMapper.map(user, UserDto.class);
     }

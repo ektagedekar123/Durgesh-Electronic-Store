@@ -53,6 +53,9 @@ public class CategoryServiceImpl implements CategoryService {
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
         category.setCoverImage(categoryDto.getCoverImage());
+        category.setCreatedBy(categoryDto.getCreatedBy());
+        category.setLastModifiedBy(categoryDto.getLastModifiedBy());
+        category.setIsActive(categoryDto.getIsActive());
 
         Category updatedCategory = categoryRepo.save(category);
         log.info("Completed dao layer for updating category with categoryId: {}", categoryId);
