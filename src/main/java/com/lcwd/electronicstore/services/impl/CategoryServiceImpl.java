@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private ModelMapper mapper;
 
-    @Value("${user.profile.image.path}")
+    @Value("${category.profile.image.path}")
     private String imagePath;
 
 

@@ -34,7 +34,7 @@ public class CategoryController {
     @Autowired
     private FileService fileService;
 
-    @Value("${user.profile.image.path}")
+    @Value("${category.profile.image.path}")
     private String imageUploadPath;
 
 
@@ -136,13 +136,14 @@ public class CategoryController {
 
 
     @PostMapping("/categories/image/upload/{categoryId}")
-    public ResponseEntity<ImageResponse> uploadFile(@RequestParam("userImage") MultipartFile image,
+    public ResponseEntity<ImageResponse> uploadFile(@RequestParam("categoryImage") MultipartFile image,
                                                     @PathVariable String categoryId) throws IOException {
 
         logger.info("Entering request for Uploading image with Category id: {}", categoryId);
+        CategoryDto categoryDto = categoryService.getCategory(categoryId);
         String imagename = fileService.uploadFile(image, imageUploadPath);
 
-        CategoryDto categoryDto = categoryService.getCategory(categoryId);
+
         categoryDto.setCoverImage(imagename);
         categoryService.updateCategory(categoryDto, categoryId);
         logger.info("Image saved in DB");
@@ -151,7 +152,7 @@ public class CategoryController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
-    @GetMapping("/categories/image/upload/{categoryId}")
+    @GetMapping("/categories/image/serve/{categoryId}")
     public void serveImage(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
 
         logger.info("Entering request for downloading image with categoryId: {}", categoryId);

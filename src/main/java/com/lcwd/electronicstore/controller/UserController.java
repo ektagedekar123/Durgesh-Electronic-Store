@@ -144,9 +144,10 @@ public class UserController {
     public ResponseEntity<ImageResponse> uploadImage(@RequestParam("userimage") MultipartFile image,
                                                      @PathVariable String userId) throws IOException {
         logger.info("Entering request to upload image with User id: {} & saving image into DB",userId);
+        UserDto userDto = userService.getUserById(userId);
         String imagename = fileService.uploadFile(image, imageUploadPath);
 
-        UserDto userDto = userService.getUserById(userId);
+
         userDto.setImagename(imagename);
         UserDto updatedUser = userService.updateUser(userDto, userId);
 

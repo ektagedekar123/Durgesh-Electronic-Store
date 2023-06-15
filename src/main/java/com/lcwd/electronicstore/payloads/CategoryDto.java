@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Setter
 @Getter
@@ -19,7 +20,7 @@ public class CategoryDto extends BaseEntityDto {
     private String CategoryId;
 
    @NotBlank
-   @Min(value = 3, message= "title must be of minimum 3 characters!!")
+   @Size(min = 3, message= "title must be of minimum 3 characters!!")
     private String title;
 
    @NotBlank(message= "Description is required!!")
