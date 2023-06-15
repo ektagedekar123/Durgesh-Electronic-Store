@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -34,7 +35,7 @@ public class CategoryController {
 
 
     @PostMapping("/categories")
-    public ResponseEntity<CategoryDto> createCategory(@RequestBody CategoryDto categoryDto){
+    public ResponseEntity<CategoryDto> createCategory(@Valid @RequestBody CategoryDto categoryDto){
         logger.info("Entering request for creating category");
         CategoryDto dto = categoryService.createCategory(categoryDto);
         logger.info("Completed request for creating category");
@@ -49,7 +50,7 @@ public class CategoryController {
      * @return CategoryDto
      */
     @PutMapping("/categories/{categoryId}")
-    public ResponseEntity<CategoryDto> updateCategory(@RequestBody CategoryDto dto, @PathVariable String categoryId){
+    public ResponseEntity<CategoryDto> updateCategory(@Valid @RequestBody CategoryDto dto, @PathVariable String categoryId){
         logger.info("Entering request for updating category with category Id: {}",categoryId);
         CategoryDto categoryDto = categoryService.updateCategory(dto, categoryId);
         logger.info("Completed request for updating category with category Id: {}",categoryId);
