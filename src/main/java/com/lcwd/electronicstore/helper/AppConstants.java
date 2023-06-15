@@ -18,7 +18,7 @@ public class AppConstants {
 
     public static final String FILE_UPLOADED= "File uploaded successfully";
 
-    public static final String CATEGORY_NOT_FOUND= "Category not found Exception!!";
+    public static final String CATEGORY_NOT_FOUND= "Category not found with id: ";
 
 
     public static final String USER_NOT_FOUND= "User not found with id: ";

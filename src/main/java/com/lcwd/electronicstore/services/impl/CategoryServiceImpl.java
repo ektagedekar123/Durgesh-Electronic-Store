@@ -58,7 +58,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto updateCategory(CategoryDto categoryDto, String categoryId) {
         log.info("Initiating dao layer for updating category with categoryId: {}", categoryId);
-        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
+        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND+categoryId));
 
         category.setTitle(categoryDto.getTitle());
         category.setDescription(categoryDto.getDescription());
@@ -75,7 +75,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(String categoryId) {
         log.info("Initiating dao layer for deleting category with category id: {}",categoryId);
-        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
+        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND+categoryId));
         String fullPath = imagePath + category.getCoverImage();
        try {
            Path path = Paths.get(fullPath);
@@ -94,7 +94,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public CategoryDto getCategory(String categoryId) {
         log.info("Initiating dao layer to get single category with category id: {}",categoryId);
-        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND));
+        Category category = categoryRepo.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND+categoryId));
         log.info("Completed dao layer to get single category with category id: {}",categoryId);
         return this.mapper.map(category, CategoryDto.class);
     }
