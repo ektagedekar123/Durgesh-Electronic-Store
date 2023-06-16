@@ -1,4 +1,6 @@
-package com.lcwd.electronicstore.entities;
+package com.lcwd.electronicstore.payloads;
+
+
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -6,38 +8,41 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
-
-@Entity
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "products")
-public class Product {
+public class ProductDto {
 
-    @Id
     private String productid;
 
+    @NotBlank(message = "title is required!!")
+    @Size(min= 3, message = "title must be of minimum 3 characters")
     private String title;
 
-    @Column(length= 10000)
+
+    @NotBlank
     private String description;
 
+    @NotBlank(message= "Price is required!!")
     private int price;
 
     private int discountedPrice;
 
+    @NotEmpty
     private int quantity;
 
     private Date addedDate;
 
+    @NotBlank
     private boolean live;
 
+    @NotNull
     private boolean stock;
-
 
 }
