@@ -25,5 +25,7 @@ public class AppConstants {
 
     public static final String USER_NOT_FOund_WITH_Email= "User not found with email id: ";
 
+    public static final String PRODUCT_NOT_FOUND="Product not found with Id: ";
+
 
 }

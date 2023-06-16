@@ -16,7 +16,7 @@ public interface ProductService {
 
     PageableResponse<ProductDto> getAllProducts(int pageNo, int pageSize, String sortDir, String sortBy);
 
-    PageableResponse<ProductDto> getAllLiveProducts(Pageable pageable, int pageNo, int pageSize, String sortDir, String sortBy);
+    PageableResponse<ProductDto> getAllLiveProducts(int pageNo, int pageSize, String sortDir, String sortBy);
 
-    PageableResponse<ProductDto> searchByTitle(Pageable pageable, String title);
+    PageableResponse<ProductDto> searchByTitle(String title, int pageNo, int pageSize, String sortDir, String sortBy);
 }
