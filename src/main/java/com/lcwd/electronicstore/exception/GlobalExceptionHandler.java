@@ -4,6 +4,8 @@ import com.lcwd.electronicstore.payloads.ApiResponse;
 import com.lcwd.electronicstore.validate.ImageNameValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.mapping.PropertyPath;
+import org.springframework.data.mapping.PropertyReferenceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -56,5 +58,14 @@ public class GlobalExceptionHandler {
         logger.info("Bad Api request");
         ApiResponse apiResponse=ApiResponse.builder().message(ex.getMessage()).status(HttpStatus.BAD_REQUEST).success(false).build();
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(PropertyReferenceException.class)
+    public ResponseEntity<ApiResponse> handlingPropertyReferenceException(PropertyReferenceException ex){
+
+//        PropertyPath propertyPath = ex.getBaseProperty();
+//        String propertyName = ex.getPropertyName();
+        ApiResponse apiResponse=ApiResponse.builder().message(ex.getMessage()).status(HttpStatus.NOT_FOUND).success(false).build();
+        return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+
     }
 }
