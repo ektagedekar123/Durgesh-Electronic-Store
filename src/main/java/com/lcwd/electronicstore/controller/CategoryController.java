@@ -23,7 +23,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/categoryapi")
 public class CategoryController {
 
     private Logger logger= LoggerFactory.getLogger(CategoryController.class);
