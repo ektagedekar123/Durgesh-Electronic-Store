@@ -17,7 +17,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ProductDto {
+public class ProductDto extends BaseEntityDto{
 
     private String productid;
 
@@ -29,20 +29,18 @@ public class ProductDto {
     @NotBlank
     private String description;
 
-    @NotBlank(message= "Price is required!!")
+
     private int price;
 
     private int discountedPrice;
 
-    @NotEmpty
+
     private int quantity;
 
-    private Date addedDate;
 
-    @NotBlank
     private boolean live;
 
-    @NotNull
+
     private boolean stock;
 
 }

@@ -49,6 +49,9 @@ public class ProductServiceImpl implements ProductService {
         product.setDiscountedPrice(productDto.getDiscountedPrice());
         product.setLive(productDto.isLive());
         product.setStock(productDto.isStock());
+        product.setCreatedBy(productDto.getCreatedBy());
+        product.setLastModifiedBy(productDto.getLastModifiedBy());
+        product.setIsActive(productDto.getIsActive());
 
         Product updatedProduct = this.productRepository.save(product);
 
@@ -68,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageableResponse<ProductDto> getAllProducts(int pageNo, int pageSize, String sortDir, String sortBy) {
+    public PageableResponse<ProductDto> getAllProducts(int pageNo, int pageSize, String sortBy, String sortDir) {
 
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
@@ -79,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageableResponse<ProductDto> getAllLiveProducts(int pageNo, int pageSize, String sortDir, String sortBy) {
+    public PageableResponse<ProductDto> getAllLiveProducts(int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
         Page<Product> page = this.productRepository.findByLiveTrue(pageable);
@@ -88,9 +91,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public PageableResponse<ProductDto> searchByTitle(String title, int pageNo, int pageSize, String sortDir, String sortBy) {
+    public PageableResponse<ProductDto> searchByTitle(String title, int pageNo, int pageSize, String sortBy, String sortDir) {
         Sort sort= sortDir.equalsIgnoreCase("desc")? Sort.by(sortBy).descending(): Sort.by(sortBy).ascending();
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
         Page<Product> page = this.productRepository.findByTitleContaining(pageable, title);
         return PageHelper.getPageableResponse(page, ProductDto.class);
     }

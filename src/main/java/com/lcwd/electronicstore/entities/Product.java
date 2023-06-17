@@ -17,7 +17,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "products")
-public class Product {
+public class Product extends BaseEntity{
 
     @Id
     private String productid;
@@ -32,8 +32,6 @@ public class Product {
     private int discountedPrice;
 
     private int quantity;
-
-    private Date addedDate;
 
     private boolean live;
 
