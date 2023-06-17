@@ -8,6 +8,8 @@ import com.lcwd.electronicstore.payloads.PageableResponse;
 import com.lcwd.electronicstore.payloads.ProductDto;
 import com.lcwd.electronicstore.repositories.ProductRepository;
 import com.lcwd.electronicstore.services.ProductService;
+import lombok.extern.slf4j.Slf4j;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     @Autowired
@@ -31,16 +34,18 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ProductDto createProduct(ProductDto productDto) {
-
+        log.info("Initiating dao layer to create product");
         String randomId = UUID.randomUUID().toString();
         productDto.setProductid(randomId);
         Product product = this.modelMapper.map(productDto, Product.class);
         Product savedProduct = productRepository.save(product);
+        log.info("Completed dao layer to create product");
         return this.modelMapper.map(savedProduct, ProductDto.class);
     }
 
     @Override
     public ProductDto updateProduct(ProductDto productDto, String productId) {
+        log.info("Initiating dao layer to update product with product id: {}",productId);
         Product product = this.productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND + productId));
         product.setTitle(productDto.getTitle());
         product.setDescription(productDto.getDescription());
@@ -54,47 +59,56 @@ public class ProductServiceImpl implements ProductService {
         product.setIsActive(productDto.getIsActive());
 
         Product updatedProduct = this.productRepository.save(product);
-
+        log.info("Completed dao layer to update product with product id: {}",productId);
         return this.modelMapper.map(updatedProduct, ProductDto.class);
     }
 
     @Override
     public void deleteProduct(String productId) {
+        log.info("Initiating dao layer to delete product with product id: {}",productId);
         Product product = this.productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND + productId));
+        log.info("Completed dao layer to delete product with product id: {}",productId);
         this.productRepository.delete(product);
     }
 
     @Override
     public ProductDto getProduct(String productId) {
+        log.info("Initiating dao layer to get single product with product id: {}",productId);
         Product product = this.productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.PRODUCT_NOT_FOUND + productId));
+        log.info("Completed dao layer to get single product with product id: {}",productId);
         return this.modelMapper.map(product, ProductDto.class);
     }
 
     @Override
     public PageableResponse<ProductDto> getAllProducts(int pageNo, int pageSize, String sortBy, String sortDir) {
-
+        log.info("Initiating dao layer to get all products with pagination");
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
         Page<Product> productPage = this.productRepository.findAll(pageable);
 
         PageableResponse<ProductDto> response = PageHelper.getPageableResponse(productPage, ProductDto.class);
+        log.info("Completed dao layer to get all products with pagination");
         return response;
     }
 
     @Override
     public PageableResponse<ProductDto> getAllLiveProducts(int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Initiating dao layer to get all live products with pagination");
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
         Page<Product> page = this.productRepository.findByLiveTrue(pageable);
+        log.info("Completed dao layer to get all live products with pagination");
        return PageHelper.getPageableResponse(page, ProductDto.class);
 
     }
 
     @Override
     public PageableResponse<ProductDto> searchByTitle(String title, int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Initiating dao layer to search all products by title with keywords: {}",title);
         Sort sort= sortDir.equalsIgnoreCase("desc")? Sort.by(sortBy).descending(): Sort.by(sortBy).ascending();
         Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
         Page<Product> page = this.productRepository.findByTitleContaining(pageable, title);
+        log.info("Completed dao layer to search all products by title with keywords: {}",title);
         return PageHelper.getPageableResponse(page, ProductDto.class);
     }
 }

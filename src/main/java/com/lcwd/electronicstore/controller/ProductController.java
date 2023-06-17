@@ -5,12 +5,15 @@ import com.lcwd.electronicstore.payloads.ApiResponse;
 import com.lcwd.electronicstore.payloads.PageableResponse;
 import com.lcwd.electronicstore.payloads.ProductDto;
 import com.lcwd.electronicstore.services.ProductService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping("/productapi")
@@ -19,32 +22,38 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    private Logger logger= LoggerFactory.getLogger(ProductController.class);
+
     @PostMapping("/products")
     public ResponseEntity<ProductDto> createProduct(@Valid @RequestBody ProductDto dto) {
-
+        logger.info("Entering request for creating product");
         ProductDto productDto = productService.createProduct(dto);
+        logger.info("Completed request for creating product");
         return new ResponseEntity<>(productDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/products/{productId}")
     public ResponseEntity<ProductDto> updateProduct(@Valid @RequestBody ProductDto dto, @PathVariable String productId) {
-
+        logger.info("Entering request for updating product with product id: {}",productId);
         ProductDto productDto = productService.updateProduct(dto, productId);
+        logger.info("Completed request for updating product with product id: {}",productId);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/products/{productId}")
     public ResponseEntity<ApiResponse> deleteProduct(@PathVariable String productId) {
-
+        logger.info("Enetring request for deleting product with product id: {}",productId);
         productService.deleteProduct(productId);
         ApiResponse apiResponse = ApiResponse.builder().message("Product deleted successfully!!").success(true).status(HttpStatus.OK).build();
+        logger.info("Completed request for deleting product with product id: {}",productId);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @GetMapping("/products/{productId}")
     public ResponseEntity<ProductDto> getSingleProduct(@PathVariable String productId) {
-
+        logger.info("Entering request for getting single product with product id: {}",productId);
         ProductDto productDto = productService.getProduct(productId);
+        logger.info("Completed request for getting single product with product id: {}",productId);
         return new ResponseEntity<>(productDto, HttpStatus.OK);
     }
 
@@ -54,7 +63,9 @@ public class ProductController {
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_ByTitle, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir) {
+        logger.info("Entering request for getting all products");
         PageableResponse<ProductDto> pageableResponse = this.productService.getAllProducts(pageNo, pageSize, sortBy, sortDir);
+        logger.info("Completed request for getting all products");
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
 
@@ -64,8 +75,9 @@ public class ProductController {
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
             @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_ByTitle, required = false) String sortBy,
             @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir) {
-
+        logger.info("Entering request for getting all live products");
         PageableResponse<ProductDto> pageableResponse = this.productService.getAllLiveProducts(pageNo, pageSize, sortBy, sortDir);
+        logger.info("Completed request for getting all live products");
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
     @GetMapping("/products/search/{subTitle}")
@@ -74,7 +86,9 @@ public class ProductController {
                                                                       @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
                                                                       @RequestParam(value = "sortBy", defaultValue = AppConstants.SORT_ByTitle, required = false) String sortBy,
                                                                       @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir) {
+        logger.info("Entering request for searching products by title with keywords: {}",title);
         PageableResponse<ProductDto> pageableResponse = this.productService.searchByTitle(title, pageNo, pageSize, sortBy, sortDir);
+        logger.info("Completed request for searching products by title with keywords: {}",title);
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
 
