@@ -2,6 +2,7 @@ package com.lcwd.electronicstore.payloads;
 
 
 
+import com.lcwd.electronicstore.entities.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,5 +43,9 @@ public class ProductDto extends BaseEntityDto{
 
 
     private boolean stock;
+
+    private String productImage;
+
+    private CategoryDto category;
 
 }
