@@ -2,17 +2,22 @@ package com.lcwd.electronicstore.controller;
 
 import com.lcwd.electronicstore.helper.AppConstants;
 import com.lcwd.electronicstore.payloads.ApiResponse;
+import com.lcwd.electronicstore.payloads.ImageResponse;
 import com.lcwd.electronicstore.payloads.PageableResponse;
 import com.lcwd.electronicstore.payloads.ProductDto;
+import com.lcwd.electronicstore.services.FileService;
 import com.lcwd.electronicstore.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 
 
 @RestController
@@ -21,6 +26,12 @@ public class ProductController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private FileService fileService;
+
+    @Value("${product.image.path}")
+    private String imagePath;
 
     private Logger logger= LoggerFactory.getLogger(ProductController.class);
 
@@ -144,6 +155,20 @@ public class ProductController {
         PageableResponse<ProductDto> pageableResponse = this.productService.searchByTitle(title, pageNo, pageSize, sortBy, sortDir);
         logger.info("Completed request for searching products by title with keywords: {}",title);
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
+    }
+
+
+
+    @PostMapping("/products/image/upload")
+    public ResponseEntity<ImageResponse> uploadImage(@PathVariable String productId,
+                                                     @RequestParam("productimage") MultipartFile image) throws IOException {
+        String filename = fileService.uploadFile(image, imagePath);
+        ProductDto productDto = productService.getProduct(productId);
+        productDto.setProductImage(filename);
+        ProductDto dto = productService.updateProduct(productDto, productId);
+
+        ImageResponse response = ImageResponse.builder().imagename(dto.getProductImage()).message(AppConstants.FILE_UPLOADED).status(HttpStatus.CREATED).success(true).build();
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
 }

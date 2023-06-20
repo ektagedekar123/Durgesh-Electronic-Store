@@ -37,5 +37,7 @@ public class Product extends BaseEntity{
 
     private boolean stock;
 
+    private String productImage;
+
 
 }
