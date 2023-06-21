@@ -1,10 +1,7 @@
 package com.lcwd.electronicstore.controller;
 
 import com.lcwd.electronicstore.helper.AppConstants;
-import com.lcwd.electronicstore.payloads.ApiResponse;
-import com.lcwd.electronicstore.payloads.ImageResponse;
-import com.lcwd.electronicstore.payloads.PageableResponse;
-import com.lcwd.electronicstore.payloads.ProductDto;
+import com.lcwd.electronicstore.payloads.*;
 import com.lcwd.electronicstore.services.FileService;
 import com.lcwd.electronicstore.services.ProductService;
 import org.slf4j.Logger;
@@ -12,12 +9,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.io.InputStream;
 
 
 @RestController
@@ -159,16 +160,31 @@ public class ProductController {
 
 
 
-    @PostMapping("/products/image/upload")
+    @PostMapping("/products/image/upload/{productId}")
     public ResponseEntity<ImageResponse> uploadImage(@PathVariable String productId,
                                                      @RequestParam("productimage") MultipartFile image) throws IOException {
+        logger.info("Entering request for Uploading image with Product id: {}", productId);
         String filename = fileService.uploadFile(image, imagePath);
         ProductDto productDto = productService.getProduct(productId);
         productDto.setProductImage(filename);
         ProductDto dto = productService.updateProduct(productDto, productId);
-
+        logger.info("Image saved in DB");
         ImageResponse response = ImageResponse.builder().imagename(dto.getProductImage()).message(AppConstants.FILE_UPLOADED).status(HttpStatus.CREATED).success(true).build();
+        logger.info("Completed request for Uploading image with Product id: {}", productId);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/products/image/serve/{productId}")
+    public void serveImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
+
+        logger.info("Entering request for downloading image with productId: {}", productId);
+        ProductDto productDto = productService.getProduct(productId);
+        String productImage = productDto.getProductImage();
+
+        InputStream inputStream = fileService.getResource(imagePath, productImage);
+        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        StreamUtils.copy(inputStream, response.getOutputStream());
+        logger.info("Completed request for downloading image with productId: {}", productId);
     }
 
 }
