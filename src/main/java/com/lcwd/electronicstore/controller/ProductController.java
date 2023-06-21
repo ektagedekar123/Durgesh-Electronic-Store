@@ -158,7 +158,14 @@ public class ProductController {
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
     }
 
-
+    /**
+     * @author Ekta
+     * @apiNote This method is for uploading image
+     * @param productId
+     * @param image
+     * @return ImageResponse
+     * @throws IOException
+     */
 
     @PostMapping("/products/image/upload/{productId}")
     public ResponseEntity<ImageResponse> uploadImage(@PathVariable String productId,
@@ -174,6 +181,13 @@ public class ProductController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * @author Ekta
+     * @apiNote This method is for downloading image
+     * @param productId
+     * @param response
+     * @throws IOException
+     */
     @GetMapping("/products/image/serve/{productId}")
     public void serveImage(@PathVariable String productId, HttpServletResponse response) throws IOException {
 

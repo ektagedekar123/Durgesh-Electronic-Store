@@ -137,7 +137,14 @@ public class CategoryController {
      return new ResponseEntity<>(this. categoryService.searchCategory(keywords), HttpStatus.OK);
     }
 
-
+    /**
+     * @author Ekta
+     * @apiNote This method is for uploading file
+     * @param image
+     * @param categoryId
+     * @return ImageResponse
+     * @throws IOException
+     */
 
     @PostMapping("/categories/image/upload/{categoryId}")
     public ResponseEntity<ImageResponse> uploadFile(@RequestParam("categoryImage") MultipartFile image,
@@ -156,6 +163,13 @@ public class CategoryController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    /**
+     * @author Ekta
+     * @apiNote This method is for downloading image
+     * @param categoryId
+     * @param response
+     * @throws IOException
+     */
     @GetMapping("/categories/image/serve/{categoryId}")
     public void serveImage(@PathVariable String categoryId, HttpServletResponse response) throws IOException {
 
@@ -168,6 +182,14 @@ public class CategoryController {
         StreamUtils.copy(inputStream, response.getOutputStream());
         logger.info("Completed request for downloading image with categoryId: {}", categoryId);
     }
+
+    /**
+     * @author Ekta
+     * @apiNote This method is for creating product in Category
+     * @param categoryId
+     * @param productDto
+     * @return ProductDto
+     */
       @PostMapping("/categories/{categoryId}/product")
       public ResponseEntity<ProductDto> createProductWithCategoryId(@PathVariable String categoryId,
                                                                     @RequestBody ProductDto productDto){
