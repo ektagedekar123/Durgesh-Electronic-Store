@@ -5,10 +5,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -27,6 +27,8 @@ public class Category extends BaseEntity{
     @Column(name = "category_description", length= 80)
     private String description;
 
-
     private String coverImage;
+
+    @OneToMany(mappedBy = "category", cascade= CascadeType.ALL, fetch= FetchType.LAZY )
+    private List<Product> products=new ArrayList<>();
 }

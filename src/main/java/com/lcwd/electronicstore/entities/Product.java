@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -38,6 +35,10 @@ public class Product extends BaseEntity{
     private boolean stock;
 
     private String productImage;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name= "category_id")
+    private Category category;
 
 
 }
