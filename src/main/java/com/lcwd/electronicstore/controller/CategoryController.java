@@ -4,6 +4,7 @@ import com.lcwd.electronicstore.helper.AppConstants;
 import com.lcwd.electronicstore.payloads.*;
 import com.lcwd.electronicstore.services.CategoryService;
 import com.lcwd.electronicstore.services.FileService;
+import com.lcwd.electronicstore.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private FileService fileService;
@@ -164,4 +168,13 @@ public class CategoryController {
         StreamUtils.copy(inputStream, response.getOutputStream());
         logger.info("Completed request for downloading image with categoryId: {}", categoryId);
     }
+      @PostMapping("/categories/{categoryId}/product")
+      public ResponseEntity<ProductDto> createProductWithCategoryId(@PathVariable String categoryId,
+                                                                    @RequestBody ProductDto productDto){
+          logger.info("Entering request for creating product with category id: {}", categoryId);
+          ProductDto productWithCategory = productService.createProductWithCategory(productDto, categoryId);
+          logger.info("Completed request for creating product with category id: {}", categoryId);
+          return new ResponseEntity<>(productWithCategory, HttpStatus.CREATED);
+
+      }
 }

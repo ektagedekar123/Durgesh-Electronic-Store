@@ -1,11 +1,13 @@
 package com.lcwd.electronicstore.services.impl;
 
+import com.lcwd.electronicstore.entities.Category;
 import com.lcwd.electronicstore.entities.Product;
 import com.lcwd.electronicstore.exception.ResourceNotFoundException;
 import com.lcwd.electronicstore.helper.AppConstants;
 import com.lcwd.electronicstore.helper.PageHelper;
 import com.lcwd.electronicstore.payloads.PageableResponse;
 import com.lcwd.electronicstore.payloads.ProductDto;
+import com.lcwd.electronicstore.repositories.CategoryRepository;
 import com.lcwd.electronicstore.repositories.ProductRepository;
 import com.lcwd.electronicstore.services.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,9 @@ public class ProductServiceImpl implements ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Autowired
     private ModelMapper modelMapper;
@@ -131,5 +136,22 @@ public class ProductServiceImpl implements ProductService {
         Page<Product> page = this.productRepository.findByTitleContaining(pageable, title);
         log.info("Completed dao layer to search all products by title with keywords: {}",title);
         return PageHelper.getPageableResponse(page, ProductDto.class);
+    }
+
+    @Override
+    public ProductDto createProductWithCategory(ProductDto productDto, String categoryId) {
+        log.info("Initiating dao layer to create product with category with category id: {}", categoryId);
+        // fetch category from DB
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND + categoryId));
+        Product product = modelMapper.map(productDto, Product.class);
+        String randomId = UUID.randomUUID().toString();
+
+        product.setProductid(randomId);
+        product.setCategory(category);
+
+        Product saved = productRepository.save(product);
+        log.info("Initiating dao layer to create product with category with category id: {}", categoryId);
+        return modelMapper.map(saved, ProductDto.class);
+
     }
 }
