@@ -136,14 +136,14 @@ public class UserController {
      */
     @GetMapping("/users/search/{keywords}")
     public ResponseEntity<List<UserDto>> searchUsers(@PathVariable String keywords){
-        logger.info("Entering request for searching user with keywords: {}",keywords);
+        logger.info("Entering request for searching user with keywords {}",keywords);
         return new ResponseEntity<>(userService.searchUser(keywords), HttpStatus.OK);
     }
 
     @PostMapping("/users/image/{userId}")
     public ResponseEntity<ImageResponse> uploadImage(@RequestParam("userimage") MultipartFile image,
                                                      @PathVariable String userId) throws IOException {
-        logger.info("Entering request to upload image with User id: {} & saving image into DB",userId);
+        logger.info("Entering request to upload image with User id {} & saving image into DB",userId);
         UserDto userDto = userService.getUserById(userId);
         String imagename = fileService.uploadFile(image, imageUploadPath);
 
@@ -158,7 +158,7 @@ public class UserController {
 
     @GetMapping("/users/image/{userId}")
     public void serveImage(@PathVariable String userId, HttpServletResponse response) throws IOException {
-        logger.info("Entering request to download image with User id: {}",userId);
+        logger.info("Entering request to download image with User id {}",userId);
         UserDto userDto = userService.getUserById(userId);
         logger.info("User image name : {}",userDto.getImagename());
         InputStream inputStream = fileService.getResource(imageUploadPath, userDto.getImagename());
