@@ -154,4 +154,27 @@ public class ProductServiceImpl implements ProductService {
         return modelMapper.map(saved, ProductDto.class);
 
     }
+
+    @Override
+    public ProductDto updateProductWithCategory(String productId, String categoryId) {
+        log.info("Initiating dao layer for updating Product with category id {] and Product id {}",categoryId, productId);
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException((AppConstants.PRODUCT_NOT_FOUND + productId)));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND + categoryId));
+        product.setCategory(category);
+        Product saved = productRepository.save(product);
+        log.info("Completed dao layer for updating Product with category id {] and Product id {}",categoryId, productId);
+        return modelMapper.map(saved, ProductDto.class);
+    }
+
+    @Override
+    public PageableResponse<ProductDto> getProductsByCategoryId(String categoryId, int pageNo, int pageSize, String sortBy, String sortDir) {
+        log.info("Initiating dao layer to get all products by category id {}", categoryId);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND + categoryId));
+
+        Sort sort= sortDir.equalsIgnoreCase("desc")? Sort.by(sortBy).descending(): Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
+        Page<Product> productPage = productRepository.findByCategory(category, pageable);
+        log.info("Completed dao layer to get all products by category id {}", categoryId);
+        return PageHelper.getPageableResponse(productPage, ProductDto.class);
+    }
 }
