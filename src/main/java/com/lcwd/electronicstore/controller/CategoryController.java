@@ -225,7 +225,7 @@ public class CategoryController {
      * @param pageSize
      * @param sortBy
      * @param sortDir
-     * @return
+     * @return PageableResponse<ProductDto>
      */
       @GetMapping("/categories/{categoryId}/products")
       public ResponseEntity<PageableResponse<ProductDto>> getProductsByCategory(@PathVariable String categoryId,
