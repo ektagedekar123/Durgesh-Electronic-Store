@@ -154,4 +154,15 @@ public class ProductServiceImpl implements ProductService {
         return modelMapper.map(saved, ProductDto.class);
 
     }
+
+    @Override
+    public ProductDto updateProductWithCategory(String productId, String categoryId) {
+        log.info("Initiating dao layer for updating Product with category id {] and Product id {}",categoryId, productId);
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException((AppConstants.PRODUCT_NOT_FOUND + productId)));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(AppConstants.CATEGORY_NOT_FOUND + categoryId));
+        product.setCategory(category);
+        Product saved = productRepository.save(product);
+        log.info("Completed dao layer for updating Product with category id {] and Product id {}",categoryId, productId);
+        return modelMapper.map(saved, ProductDto.class);
+    }
 }

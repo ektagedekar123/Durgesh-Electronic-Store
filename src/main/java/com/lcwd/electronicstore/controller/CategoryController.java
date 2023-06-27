@@ -199,4 +199,21 @@ public class CategoryController {
           return new ResponseEntity<>(productWithCategory, HttpStatus.CREATED);
 
       }
+
+    /**
+     * @author Ekta
+     * @apiNote This method is for assigning category to Product
+     * @param productId
+     * @param categoryId
+     * @return ProductDto
+     */
+      @PutMapping("/categories/{categoryId}/{productId}")
+      public ResponseEntity<ProductDto> updateCategoryOfProduct(@PathVariable String productId, @PathVariable String categoryId){
+          logger.info("Entering request for updating product with category id {} and product id {}", categoryId, productId);
+          ProductDto productDto = productService.updateProductWithCategory(productId, categoryId);
+          logger.info("Completed request for updating product with category id {} and product id {}", categoryId, productId);
+
+          return new ResponseEntity<ProductDto>(productDto, HttpStatus.OK);
+
+      }
 }
