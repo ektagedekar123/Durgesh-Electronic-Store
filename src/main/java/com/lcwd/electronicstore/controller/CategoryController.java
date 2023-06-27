@@ -207,7 +207,7 @@ public class CategoryController {
      * @param categoryId
      * @return ProductDto
      */
-      @PutMapping("/categories/{categoryId}/{productId}")
+      @PutMapping("/categories/{categoryId}/products/{productId}")
       public ResponseEntity<ProductDto> updateCategoryOfProduct(@PathVariable String productId, @PathVariable String categoryId){
           logger.info("Entering request for updating product with category id {} and product id {}", categoryId, productId);
           ProductDto productDto = productService.updateProductWithCategory(productId, categoryId);
@@ -215,5 +215,27 @@ public class CategoryController {
 
           return new ResponseEntity<ProductDto>(productDto, HttpStatus.OK);
 
+      }
+
+    /**
+     * @Author Ekta
+     * @apiNote This method is for getting all products by Category id
+     * @param categoryId
+     * @param pageNo
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return PageableResponse<ProductDto>
+     */
+      @GetMapping("/categories/{categoryId}/products")
+      public ResponseEntity<PageableResponse<ProductDto>> getProductsByCategory(@PathVariable String categoryId,
+                                                                                @RequestParam(value = "pageNo", defaultValue =  AppConstants.PAGE_NO, required = false) int pageNo,
+                                                                                @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) int pageSize,
+                                                                                @RequestParam(value = "sortBy", defaultValue =  AppConstants.SORT_ByTitle, required = false) String sortBy,
+                                                                                @RequestParam(value = "sortDir", defaultValue = AppConstants.SORT_DIR, required = false) String sortDir){
+         logger.info("Entering request to get all products with category id {}", categoryId);
+          PageableResponse<ProductDto> products = productService.getProductsByCategoryId(categoryId, pageNo, pageSize, sortBy, sortDir);
+          logger.info("Completed request to get all products with category id {}", categoryId);
+          return new ResponseEntity<>(products, HttpStatus.OK);
       }
 }

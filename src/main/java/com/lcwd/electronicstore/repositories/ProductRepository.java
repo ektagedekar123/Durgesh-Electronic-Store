@@ -1,5 +1,6 @@
 package com.lcwd.electronicstore.repositories;
 
+import com.lcwd.electronicstore.entities.Category;
 import com.lcwd.electronicstore.entities.Product;
 import com.lcwd.electronicstore.payloads.PageableResponse;
 import org.springframework.data.domain.Page;
@@ -13,4 +14,6 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     Page<Product> findByTitleContaining(Pageable pageable,String title);
 
     Page<Product> findByLiveTrue(Pageable pageable);
+
+    Page<Product> findByCategory(Category category, Pageable pageable);
 }
