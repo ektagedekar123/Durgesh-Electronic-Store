@@ -14,14 +14,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class BaseEntityDto {
 
-    @NotBlank
+//    @NotBlank
     public String createdBy;
 
     private LocalDateTime createdOn;
 
-    @NotBlank
+//    @NotBlank
     private String lastModifiedBy;
 
-    @NotEmpty
+ //   @NotEmpty
     private String isActive;
 }
