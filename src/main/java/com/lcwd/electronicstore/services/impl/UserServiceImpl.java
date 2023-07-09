@@ -154,6 +154,7 @@ public class UserServiceImpl implements UserService {
         log.info("Completed dao layer for getting all users");  */
 
         PageableResponse<UserDto> pageableResponse = PageHelper.getPageableResponse(page, UserDto.class);
+        log.info("Comleted dao layer for getting all users");
         return pageableResponse;
     }
 
