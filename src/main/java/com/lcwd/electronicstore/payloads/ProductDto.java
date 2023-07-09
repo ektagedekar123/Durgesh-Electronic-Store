@@ -3,10 +3,7 @@ package com.lcwd.electronicstore.payloads;
 
 
 import com.lcwd.electronicstore.entities.Category;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
@@ -18,6 +15,7 @@ import java.util.Date;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ProductDto extends BaseEntityDto{
 
     private String productid;
