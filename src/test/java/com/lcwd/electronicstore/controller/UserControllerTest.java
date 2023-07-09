@@ -130,7 +130,7 @@ class UserControllerTest {
     }
 
     @Test
-   public void getUser() throws Exception {
+   public void getUserTest() throws Exception {
 
         UserDto dto = this.mapper.map(user, UserDto.class);
 
@@ -147,7 +147,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void getAllUsers() throws Exception {
+    public void getAllUsersTest() throws Exception {
 
        UserDto dto1= UserDto.builder().name("Ekta")
                 .email("gedekarkta123@gmail.com")
@@ -203,7 +203,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void getUserByEmail() throws Exception {
+    public void getUserByEmailTest() throws Exception {
 
         UserDto dto = this.mapper.map(user, UserDto.class);
 
@@ -271,10 +271,10 @@ class UserControllerTest {
     }
 
     @Test
-    void uploadImage() {
+    void uploadImageTest() {
     }
 
     @Test
-    void serveImage() {
+    void serveImageTest() {
     }
 }
