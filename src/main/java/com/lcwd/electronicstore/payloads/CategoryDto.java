@@ -2,10 +2,7 @@ package com.lcwd.electronicstore.payloads;
 
 
 import com.lcwd.electronicstore.entities.BaseEntity;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -15,6 +12,7 @@ import javax.validation.constraints.Size;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CategoryDto extends BaseEntityDto {
 
     private String CategoryId;
