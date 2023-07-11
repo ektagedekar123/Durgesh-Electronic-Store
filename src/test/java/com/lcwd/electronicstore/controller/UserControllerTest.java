@@ -100,13 +100,16 @@ class UserControllerTest {
 
         String userId= "3456ggh";
         UserDto dto = this.mapper.map(user, UserDto.class);
+        dto.setCreatedBy("Ekta");
+        dto.setLastModifiedBy("Ekta");
+        dto.setIsActive("yes");
 
         Mockito.when(userService.updateUser(Mockito.any(), Mockito.anyString())).thenReturn(dto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.put("/api/users/"+userId)
           //              .headers(HttpHeaders.AUTHORIZATION,"Bearer copypaste token here from postman")   // Becoz this is Private api after applying Security, so we have to pass token
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonString(user))
+                .content(convertObjectToJsonString(dto))
                         .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -274,10 +277,10 @@ class UserControllerTest {
     }
 
     @Test
-    void uploadImageTest() {
+    public void uploadImageTest() {
     }
 
     @Test
-    void serveImageTest() {
+    public void serveImageTest() {
     }
 }
