@@ -62,7 +62,7 @@ public class UserController {
      * @return UserDto
      */
     @PutMapping("/users/{userid}")
-    public ResponseEntity<UserDto> updateUser(@Valid @PathVariable("userid") String uid, @RequestBody UserDto userdto){
+    public ResponseEntity<UserDto> updateUser(@PathVariable("userid") String uid, @Valid @RequestBody UserDto userdto){
         logger.info("Entering request for updating user with user id: {}",uid);
         UserDto updatedUserDto = this.userService.updateUser(userdto, uid);
         logger.info("Completed request for updating user with user id: {}",uid);

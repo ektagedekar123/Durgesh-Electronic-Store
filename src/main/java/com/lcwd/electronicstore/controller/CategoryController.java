@@ -192,7 +192,7 @@ public class CategoryController {
      */
       @PostMapping("/categories/{categoryId}/product")
       public ResponseEntity<ProductDto> createProductWithCategoryId(@PathVariable String categoryId,
-                                                                    @RequestBody ProductDto productDto){
+                                                                    @Valid @RequestBody ProductDto productDto){
           logger.info("Entering request for creating product with category id: {}", categoryId);
           ProductDto productWithCategory = productService.createProductWithCategory(productDto, categoryId);
           logger.info("Completed request for creating product with category id: {}", categoryId);
