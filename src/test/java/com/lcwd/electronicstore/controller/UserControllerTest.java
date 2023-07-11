@@ -65,6 +65,9 @@ class UserControllerTest {
    public void createUserTest() throws Exception {
 
         UserDto dto = mapper.map(user, UserDto.class);
+        dto.setCreatedBy("Ekta");
+        dto.setLastModifiedBy("Ekta");
+        dto.setIsActive("yes");
         Mockito.when(userService.createUser(Mockito.any())).thenReturn(dto);
 
 
@@ -73,7 +76,7 @@ class UserControllerTest {
         this.mockMvc.perform(
                 MockMvcRequestBuilders.post("/api/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(convertObjectToJsonString(user))
+                        .content(convertObjectToJsonString(dto))
                         .accept(MediaType.APPLICATION_JSON))
                         .andDo(print())
                 .andExpect(status().isCreated())
