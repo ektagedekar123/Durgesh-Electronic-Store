@@ -88,11 +88,14 @@ class ProductControllerTest {
     public void createProductTest() throws Exception {
 
         ProductDto productDto = this.mapper.map(product, ProductDto.class);
+        productDto.setCreatedBy("Ekta");
+        productDto.setLastModifiedBy("Ekta");
+        productDto.setIsActive("Yes");
         Mockito .when(productService.createProduct(Mockito.any())).thenReturn(productDto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/productapi/products")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(converObjectToJsonString(product))
+                .content(converObjectToJsonString(productDto))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -112,11 +115,17 @@ class ProductControllerTest {
     @Test
     public void updateProductTest() throws Exception {
 
-       Mockito.when(productService.updateProduct(Mockito.any(), Mockito.anyString())).thenReturn(mapper.map(product, ProductDto.class));
+        ProductDto productDto = mapper.map(product, ProductDto.class);
+
+        productDto.setCreatedBy("Ekta");
+        productDto.setLastModifiedBy("Ekta");
+        productDto.setIsActive("Yes");
+
+       Mockito.when(productService.updateProduct(Mockito.any(), Mockito.anyString())).thenReturn(productDto);
 
        this.mockMvc.perform(MockMvcRequestBuilders.put("/productapi/products/"+productId)
                .contentType(MediaType.APPLICATION_JSON)
-               .content(converObjectToJsonString(product))
+               .content(converObjectToJsonString(productDto))
                .accept(MediaType.APPLICATION_JSON))
                .andDo(print())
                .andExpect(status().isOk())
