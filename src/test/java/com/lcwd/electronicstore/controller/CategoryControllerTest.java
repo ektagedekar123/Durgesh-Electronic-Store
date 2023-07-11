@@ -72,20 +72,21 @@ class CategoryControllerTest {
                 .build();
 
 
-
-
     }
 
     @Test
     public void createCategory() throws Exception {
 
         CategoryDto categoryDto = this.mapper.map(category, CategoryDto.class);
+        categoryDto.setIsActive("Yes");
+        categoryDto.setCreatedBy("Ekta");
+        categoryDto.setLastModifiedBy("Ekta");
 
         Mockito.when(categoryService.createCategory(Mockito.any())).thenReturn(categoryDto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/categoryapi/categories")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonString(category))
+                .content(convertObjectToJsonString(categoryDto))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated())
@@ -106,11 +107,15 @@ class CategoryControllerTest {
     @Test
     public void updateCategoryTest() throws Exception {
         CategoryDto categoryDto = this.mapper.map(category, CategoryDto.class);
+        categoryDto.setIsActive("Yes");
+        categoryDto.setCreatedBy("Ekta");
+        categoryDto.setLastModifiedBy("Ekta");
+
         Mockito.when(categoryService.updateCategory(Mockito.any(), Mockito.anyString())).thenReturn(categoryDto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.put("/categoryapi/categories/"+categoryId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(convertObjectToJsonString(category))
+                .content(convertObjectToJsonString(categoryDto))
                 .accept(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -219,6 +224,9 @@ class CategoryControllerTest {
     @Test
     public void createProductWithCategoryIdTest() throws Exception {
 
+        productDto.setCreatedBy("Ekta");
+        productDto.setLastModifiedBy("Ekta");
+        productDto.setIsActive("Yes");
         Mockito.when(productService.createProductWithCategory(Mockito.any(), Mockito.anyString())).thenReturn(productDto);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/categoryapi/categories/"+categoryId+"/product")
