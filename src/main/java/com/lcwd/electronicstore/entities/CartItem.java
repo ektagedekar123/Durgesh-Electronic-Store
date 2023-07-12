@@ -1,7 +1,13 @@
 package com.lcwd.electronicstore.entities;
 
-import javax.persistence.*;
+import lombok.*;
 
+import javax.persistence.*;
+@AllArgsConstructor
+@NoArgsConstructor
+@Setter
+@Getter
+@Builder
 @Entity
 @Table(name= "cart_items")
 public class CartItem {
@@ -17,7 +23,7 @@ public class CartItem {
     @JoinColumn(name= "product_id")
     private Product product;
 
-    @ManyToOne
+    @ManyToOne   //(fetch= FetchType.LAZY)
     @JoinColumn(name= "cart_id")
     private Cart cart;
 

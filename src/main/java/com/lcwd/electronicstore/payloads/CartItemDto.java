@@ -25,6 +25,5 @@ public class CartItemDto {
 
     private ProductDto product;
 
-    private CartDto cart;
 
 }

@@ -2,10 +2,7 @@ package com.lcwd.electronicstore.payloads;
 
 import com.lcwd.electronicstore.entities.CartItem;
 import com.lcwd.electronicstore.entities.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 public class CartDto {
 
     private String cartId;
