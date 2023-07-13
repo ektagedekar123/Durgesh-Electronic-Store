@@ -1,5 +1,6 @@
 package com.lcwd.electronicstore.services;
 
+import com.lcwd.electronicstore.payloads.AddItemToCartRequest;
 import com.lcwd.electronicstore.payloads.CartDto;
 
 public interface CartService {
@@ -12,4 +13,8 @@ public interface CartService {
     CartDto addItemToCart(String userId, AddItemToCartRequest request);
 
     // remove item from Cart
+    void removeItemFromCart(String userId, int cartItem);
+
+    // remove all items from Cart
+    void clearCart(String userId);
 }
