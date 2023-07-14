@@ -1,9 +1,6 @@
 package com.lcwd.electronicstore.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -14,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Setter
 @Getter
+@ToString
 @Entity
 @Table(name= "cart")
 public class Cart extends BaseEntity{
@@ -26,6 +24,7 @@ public class Cart extends BaseEntity{
     @OneToOne
     private User user;
 
-    @OneToMany(mappedBy = "cart", cascade= CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cart", cascade= CascadeType.ALL, fetch = FetchType.EAGER)  // We can remove fetchType= Eager or we can use Set to avoid duplication of data
     private List<CartItem> items=new ArrayList<>();
 }
+// We have to apply orphanRemoval=true in @OneToMany annotaion to clear all cart items from acrt
