@@ -4,9 +4,11 @@ import com.lcwd.electronicstore.entities.Cart;
 import com.lcwd.electronicstore.entities.CartItem;
 import com.lcwd.electronicstore.entities.Product;
 import com.lcwd.electronicstore.entities.User;
+import com.lcwd.electronicstore.exception.BadApiRequestException;
 import com.lcwd.electronicstore.exception.ResourceNotFoundException;
 import com.lcwd.electronicstore.payloads.AddItemToCartRequest;
 import com.lcwd.electronicstore.payloads.CartDto;
+import com.lcwd.electronicstore.repositories.CartItemRepository;
 import com.lcwd.electronicstore.repositories.CartRepository;
 import com.lcwd.electronicstore.repositories.ProductRepository;
 import com.lcwd.electronicstore.repositories.UserRepository;
@@ -36,6 +38,9 @@ public class CartServiceImpl implements CartService {
     private CartRepository cartRepository;
 
     @Autowired
+    private CartItemRepository cartItemRepository;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
@@ -43,6 +48,10 @@ public class CartServiceImpl implements CartService {
 
         int quantity = request.getQuantity();
         String productId = request.getProductId();
+        if (quantity<=0)
+        {
+            throw new BadApiRequestException("Requested Quantity is not valid !!");
+        }
 
         // fetch the Product
         Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException("Product not found in DB!!"));
@@ -73,7 +82,7 @@ public class CartServiceImpl implements CartService {
                 updated.set(true);
             }
             return item;
-        }).collect(Collectors.toList());
+        }).toList();
 
         cart.setItems(updatedItems);
 
@@ -96,12 +105,32 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void removeItemFromCart(String userId, int cartItem) {
+    public void removeItemFromCart(String userId, int cartItemId) {
 
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(() -> new ResourceNotFoundException("Cart Item not Found in DB!!"));
+        cartItemRepository.delete(cartItem);
     }
 
     @Override
     public void clearCart(String userId) {
+        // fetch User from DB
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with id" + userId));
 
+        // fetch Cart of User
+        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("Cart of given User not found !!"));
+
+        //Remove CartItems from Cart
+        cart.getItems().clear();
+
+        cartRepository.save(cart);
+    }
+
+    @Override
+    public CartDto getCartByUser(String userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not Found with " + userId));
+        Cart cart = cartRepository.findByUser(user).orElseThrow(() -> new ResourceNotFoundException("Cart of given User not found !!"));
+
+        return modelMapper.map(cart, CartDto.class);
     }
 }
