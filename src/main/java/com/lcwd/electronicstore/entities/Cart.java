@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -15,10 +16,12 @@ import java.util.List;
 @Getter
 @Entity
 @Table(name= "cart")
-public class Cart {
+public class Cart extends BaseEntity{
 
     @Id
     private String cartId;
+
+    private Date createdAt;
 
     @OneToOne
     private User user;
