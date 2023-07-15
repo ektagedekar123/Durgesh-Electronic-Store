@@ -4,6 +4,8 @@ import com.lcwd.electronicstore.payloads.AddItemToCartRequest;
 import com.lcwd.electronicstore.payloads.ApiResponse;
 import com.lcwd.electronicstore.payloads.CartDto;
 import com.lcwd.electronicstore.services.CartService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,10 +18,13 @@ public class CartController {
     @Autowired
     private CartService cartService;
 
+    private static Logger logger= LoggerFactory.getLogger(CartController.class);
+
     @PostMapping("/carts/{userid}")
     public ResponseEntity<CartDto> addItemToCart(@RequestBody AddItemToCartRequest request, @PathVariable("userid") String userId) {
-
+        logger.info("Entering request for adding Cart item in Cart with userId {}",userId);
         CartDto cartDto = cartService.addItemToCart(userId, request);
+        logger.info("Completed request for adding Cart item in Cart with userId {}",userId);
         return new ResponseEntity<>(cartDto, HttpStatus.OK);
     }
 
