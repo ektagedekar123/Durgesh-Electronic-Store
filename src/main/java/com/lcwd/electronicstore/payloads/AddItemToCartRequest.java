@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AddItemToCartRequest {
+public class AddItemToCartRequest extends BaseEntityDto{
 
    private String productId;
 
