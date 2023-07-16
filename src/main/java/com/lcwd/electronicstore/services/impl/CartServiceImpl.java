@@ -47,10 +47,10 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public CartDto addItemToCart(String userId, AddItemToCartRequest request) {
-       log.info("Initiating dao layer for adding cart item in cart with user id {]",userId);
+       log.info("Initiating dao layer for adding cart item in cart with user id {}",userId);
         int quantity = request.getQuantity();
         String productId = request.getProductId();
-        log.info("fetching data from AddItemToCartRequest with quantity {} & productId {}",quantity,productId);
+
         if (quantity<=0)
         {
             throw new BadApiRequestException("Requested Quantity is not valid !!");
@@ -68,15 +68,15 @@ public class CartServiceImpl implements CartService {
         }catch(NoSuchElementException e){
             cart=new Cart();
             cart.setCartId(UUID.randomUUID().toString());
-            cart.setCreatedAt(new Date());
+
 
         }
-        log.info("Cart is created : {}", cart);
+
         // perform Cart operation
         // If CartItem already present, then update Cart
          AtomicReference<Boolean> updated= new AtomicReference<>(false);
         List<CartItem> items = cart.getItems();
-        log.info("items in cart: {}",items);
+
         List<CartItem> updatedItems = items.stream().map(item -> {
 
             if (item.getProduct().getProductid().equals(productId)) {
@@ -86,10 +86,10 @@ public class CartServiceImpl implements CartService {
                 updated.set(true);
             }
             return item;
-        }).toList();
-        log.info("updated items: {}",updatedItems);
+        }).collect(Collectors.toList());
+
         cart.setItems(updatedItems);
-        log.info("Cart object After adding item: {}",cart);
+
 
         // create item
         if(!updated.get()) {
@@ -102,11 +102,14 @@ public class CartServiceImpl implements CartService {
 
             cart.getItems().add(cartItem);
         }
-        log.info("If item is not present in cart then item is added & Cart object is: {}",cart);
+
         cart.setUser(user);
+        cart.setCreatedBy(request.getCreatedBy());
+        cart.setLastModifiedBy(request.getLastModifiedBy());
+        cart.setIsActive(request.getIsActive());
 
         Cart updatedCart = cartRepository.save(cart);
-        log.info("Completed dao layer for adding cart item in cart with user id {]",userId);
+        log.info("Completed dao layer for adding cart item in cart with user id {}",userId);
         return this.modelMapper.map(updatedCart, CartDto.class);
     }
 

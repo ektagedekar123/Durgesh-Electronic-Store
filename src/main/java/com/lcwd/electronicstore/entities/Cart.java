@@ -19,12 +19,10 @@ public class Cart extends BaseEntity{
     @Id
     private String cartId;
 
-    private Date createdAt;
-
     @OneToOne
     private User user;
 
-    @OneToMany(mappedBy = "cart", cascade= CascadeType.ALL, fetch = FetchType.EAGER)  // We can remove fetchType= Eager or we can use Set to avoid duplication of data
+    @OneToMany(mappedBy = "cart", cascade= CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)  // We can remove fetchType= Eager or we can use Set to avoid duplication of data
     private List<CartItem> items=new ArrayList<>();
 }
 // We have to apply orphanRemoval=true in @OneToMany annotaion to clear all cart items from acrt
