@@ -85,7 +85,8 @@ public class CartServiceImpl implements CartService {
             return item;
         }).collect(Collectors.toList());
 
-        cart.setItems(updatedItems);
+ //       cart.setItems(updatedItems);   //this line of durgesh code not work becoz of combination of annotations cascadeType.All & orphanRemoval=true
+        cart.getItems().addAll(updatedItems);
 
 
         // create item
