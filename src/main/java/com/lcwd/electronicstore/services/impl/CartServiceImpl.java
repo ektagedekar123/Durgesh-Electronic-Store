@@ -18,10 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -100,7 +97,8 @@ public class CartServiceImpl implements CartService {
                     .product(product)
                     .build();
 
-            cart.getItems().add(cartItem);
+           cart.getItems().add(cartItem);
+
         }
 
         cart.setUser(user);

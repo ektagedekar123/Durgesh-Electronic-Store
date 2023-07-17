@@ -20,5 +20,5 @@ public class CartDto {
     private UserDto user;
 
 
-    private List<CartItemDto> list=new ArrayList<>();
+    private List<CartItemDto> items=new ArrayList<>();
 }
