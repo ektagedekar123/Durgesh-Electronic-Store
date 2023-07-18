@@ -70,7 +70,7 @@ public class CartController {
         cartService.clearCart(userId);
 
         ApiResponse response = ApiResponse.builder()
-                .message("All items are removed from cart & Not Card is Blank !!")
+                .message("All items are removed from cart, Now Card is Blank !!")
                 .success(true)
                 .status(HttpStatus.OK)
                 .build();

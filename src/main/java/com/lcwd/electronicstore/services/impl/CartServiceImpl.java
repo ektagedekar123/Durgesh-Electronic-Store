@@ -59,9 +59,11 @@ public class CartServiceImpl implements CartService {
         // fetch the user from DB
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found in DB!!"));
 
+        //Case 1: If cart of User is available, fetch cart of User & add items &
+       //Case 2: if Cart is not available, craete Cart & add items
         Cart cart= null;
         try {
-            cart = cartRepository.findByUser(user).get();
+            cart = cartRepository.findByUser(user).get();   // If Cart of user is not availble, then get() method throws NoSuchElementException, so we used try-catch
         }catch(NoSuchElementException e){
             cart=new Cart();
             cart.setCartId(UUID.randomUUID().toString());
@@ -107,7 +109,7 @@ public class CartServiceImpl implements CartService {
         cart.setLastModifiedBy(request.getLastModifiedBy());
         cart.setIsActive(request.getIsActive());
 
-        Cart updatedCart = cartRepository.save(cart);
+        Cart updatedCart = cartRepository.save(cart);  // When Cart is updated, CartItem is also updated automatically, becoz we applied CascadeType.ALL
         log.info("Completed dao layer for adding cart item in cart with user id {}",userId);
         return this.modelMapper.map(updatedCart, CartDto.class);
     }
