@@ -44,6 +44,7 @@ public class Order extends BaseEntity {
     private Date deliveredDate;
 
     @ManyToOne(fetch= FetchType.EAGER)
+    @JoinColumn(name= "user_id")
     private User user;
 
     @OneToMany(mappedBy= "order", fetch= FetchType.EAGER, cascade= CascadeType.ALL)
