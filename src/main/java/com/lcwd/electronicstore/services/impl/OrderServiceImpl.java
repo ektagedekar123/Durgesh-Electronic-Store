@@ -3,12 +3,18 @@ package com.lcwd.electronicstore.services.impl;
 import com.lcwd.electronicstore.entities.*;
 import com.lcwd.electronicstore.exception.BadApiRequestException;
 import com.lcwd.electronicstore.exception.ResourceNotFoundException;
+import com.lcwd.electronicstore.helper.PageHelper;
 import com.lcwd.electronicstore.payloads.CreateOrderRequest;
 import com.lcwd.electronicstore.payloads.OrderDto;
+import com.lcwd.electronicstore.payloads.PageableResponse;
 import com.lcwd.electronicstore.repositories.*;
 import com.lcwd.electronicstore.services.OrderService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.Date;
 import java.util.List;
@@ -95,17 +101,32 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void removeOrder(String userId, String orderId) {
+    public void removeOrder(String orderId) {
 
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order is not found with id: " + orderId));
+        orderRepository.delete(order);
     }
 
     @Override
-    public List<Order> getOrdersOfUser(String userId) {
-        return null;
+    public List<OrderDto> getOrdersOfUser(String userId) {
+
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found in DB!!"));
+
+        List<Order> orderList = orderRepository.findByUser(user);
+
+        List<OrderDto> orderDtos = orderList.stream().map(order -> mapper.map(order, OrderDto.class)).collect(Collectors.toList());
+
+        return orderDtos;
     }
 
     @Override
-    public List<Order> getOrders() {
-        return null;
+    public PageableResponse<OrderDto> getOrders(int pageNo, int pageSize, String sortBy, String sortDir) {
+
+        Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
+        Pageable pageable= PageRequest.of(pageNo-1, pageSize, sort);
+
+        Page<Order> page = orderRepository.findAll(pageable);
+
+        return PageHelper.getPageableResponse(page, OrderDto.class);
     }
 }
