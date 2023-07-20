@@ -17,4 +17,6 @@ public interface OrderService {
     List<Order> getOrdersOfUser(String userId);
 
     //get Orders
+
+    List<Order> getOrders();
 }
