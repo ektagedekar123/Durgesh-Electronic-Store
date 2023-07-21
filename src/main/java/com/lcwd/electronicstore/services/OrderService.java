@@ -1,6 +1,7 @@
 package com.lcwd.electronicstore.services;
 
 import com.lcwd.electronicstore.entities.Order;
+import com.lcwd.electronicstore.payloads.CreateOrderRequest;
 import com.lcwd.electronicstore.payloads.OrderDto;
 
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
 public interface OrderService {
 
     //create Order
-    OrderDto createOrder(OrderDto orderDto, String userId, String cartId);
+    OrderDto createOrder(CreateOrderRequest orderRequest);
 
     //remove Order
     void removeOrder(String userId, String orderId);

@@ -12,6 +12,7 @@ import java.util.List;
 @Setter
 @Getter
 @ToString
+@Builder
 @Entity
 @Table(name= "cart")
 public class Cart extends BaseEntity{
