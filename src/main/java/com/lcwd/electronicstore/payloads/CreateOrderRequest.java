@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Builder
-public class CreateOrderRequest {
+public class CreateOrderRequest extends BaseEntityDto{
 
     @NotBlank(message= "User Id is required!!")
     private String userId;

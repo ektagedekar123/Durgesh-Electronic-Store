@@ -29,7 +29,7 @@ public class OrderDto extends BaseEntityDto{
 
     private String billingName;
 
-    private Date orderedDate=new Date();
+    private Date orderedDate; //=new Date();
 
     private Date deliveredDate;
 
