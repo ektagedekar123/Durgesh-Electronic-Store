@@ -3,6 +3,7 @@ package com.lcwd.electronicstore.services;
 import com.lcwd.electronicstore.entities.Order;
 import com.lcwd.electronicstore.payloads.CreateOrderRequest;
 import com.lcwd.electronicstore.payloads.OrderDto;
+import com.lcwd.electronicstore.payloads.PageableResponse;
 
 import java.util.List;
 
@@ -12,12 +13,12 @@ public interface OrderService {
     OrderDto createOrder(CreateOrderRequest orderRequest);
 
     //remove Order
-    void removeOrder(String userId, String orderId);
+    void removeOrder(String orderId);
 
     //get Orders of User
-    List<Order> getOrdersOfUser(String userId);
+    List<OrderDto> getOrdersOfUser(String userId);
 
     //get Orders
 
-    List<Order> getOrders();
+    PageableResponse<OrderDto> getOrders(int pageNo, int pageSize, String sortBy, String sortDir);
 }
