@@ -10,18 +10,21 @@ import com.lcwd.electronicstore.payloads.PageableResponse;
 import com.lcwd.electronicstore.repositories.*;
 import com.lcwd.electronicstore.services.OrderService;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-
+@Service
 public class OrderServiceImpl implements OrderService {
 
     @Autowired
@@ -42,6 +45,8 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private ModelMapper mapper;
 
+    private static Logger logger=LoggerFactory.getLogger(OrderServiceImpl.class);
+
 
     @Override
     public OrderDto createOrder(CreateOrderRequest orderDto) {
@@ -54,8 +59,8 @@ public class OrderServiceImpl implements OrderService {
 
         //fetch CartItems
         List<CartItem> cartitems = cart.getItems();
-
-        if(cartitems.size()<=0){
+        logger.info("No. of cartItems: {}",cartitems.size());
+        if(cartitems.size() <= 0){
              throw new BadApiRequestException("Invalid no. of items in Cart!!");
         }
 
@@ -89,6 +94,9 @@ public class OrderServiceImpl implements OrderService {
 
         order.setOrderItems(orderItems);
         order.setOrderAmount(orderAmount.get());
+        order.setCreatedBy(orderDto.getCreatedBy());
+        order.setLastModifiedBy(orderDto.getLastModifiedBy());
+        order.setIsActive(orderDto.getIsActive());
 
         // After converting into OrderItems, clear Cart & save it
         cart.getItems().clear();
