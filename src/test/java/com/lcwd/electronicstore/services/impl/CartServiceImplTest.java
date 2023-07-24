@@ -23,6 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -103,8 +104,10 @@ class CartServiceImplTest {
                 .totalPrice(12000)
                 .quantity(8)
                 .build();
+
+         List list=new ArrayList(List.of(cartItem1, cartItem2));
          cart = Cart.builder()
-                .items(List.of(cartItem1, cartItem2))
+                .items(list)
                 .user(user)
                 .build();
         cart.setCreatedBy("Ekta");
@@ -140,14 +143,48 @@ class CartServiceImplTest {
     @Test
    public void removeItemFromCartTest() {
 
+        String userId="23er";
+        int cartItemId= 23;
+
+        Mockito.when(cartItemRepository.findById(cartItemId)).thenReturn(Optional.of(cartItem1));
+
+        cartService.removeItemFromCart(userId, cartItemId);
+
+        Mockito.verify(cartItemRepository, Mockito.times(1)).delete(cartItem1);
+        Assertions.assertThrows(ResourceNotFoundException.class, ()-> cartService.removeItemFromCart("rt45", 22));
+
 
     }
 
     @Test
-    void clearCart() {
+    public void clearCartTest() {
+
+        String userId="23er";
+
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        Mockito.when(cartRepository.findByUser(user)).thenReturn(Optional.of(cart)).thenThrow(new ResourceNotFoundException("Cart is not found for user!!"));
+
+
+        cartService.clearCart(userId);
+        Mockito.verify(cartRepository, Mockito.times(1)).save(cart);
+        Assertions.assertThrows(ResourceNotFoundException.class, ()-> cartService.clearCart("34gh"));
+
+
     }
 
     @Test
-    void getCartByUser() {
+    public void getCartByUserTest() {
+
+        String userId="23er";
+
+        Mockito.when(userRepository.findById(userId)).thenReturn(Optional.of(user));
+        Mockito.when(cartRepository.findByUser(user)).thenReturn(Optional.of(cart)).thenThrow(new ResourceNotFoundException("Cart for user is not found!!!"));
+
+        CartDto cartDto = cartService.getCartByUser(userId);
+
+        Assertions.assertNotNull(cartDto);
+        Assertions.assertEquals(cart.getUser().getName(), cartDto.getUser().getName());
+        Assertions.assertThrows(ResourceNotFoundException.class, ()-> cartService.getCartByUser("erty"));
+
     }
 }
