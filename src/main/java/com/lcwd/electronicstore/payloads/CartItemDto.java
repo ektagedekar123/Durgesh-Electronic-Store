@@ -2,10 +2,7 @@ package com.lcwd.electronicstore.payloads;
 
 import com.lcwd.electronicstore.entities.Cart;
 import com.lcwd.electronicstore.entities.Product;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 @Setter
 @Getter
+@Builder
 public class CartItemDto {
 
     private Integer cartItemId;
