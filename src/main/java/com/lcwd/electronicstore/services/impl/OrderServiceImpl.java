@@ -59,7 +59,7 @@ public class OrderServiceImpl implements OrderService {
 
         //fetch CartItems
         List<CartItem> cartitems = cart.getItems();
-        logger.info("No. of cartItems: ",cartitems.size());
+        logger.info("No. of cartItems: {}",cartitems.size());
         if(cartitems.size() <= 0){
              throw new BadApiRequestException("Invalid no. of items in Cart!!");
         }
