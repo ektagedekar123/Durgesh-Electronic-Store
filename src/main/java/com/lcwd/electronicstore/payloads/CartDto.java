@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
-public class CartDto {
+public class CartDto extends BaseEntityDto{
 
     private String cartId;
 
