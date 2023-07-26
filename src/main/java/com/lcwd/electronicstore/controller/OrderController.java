@@ -25,6 +25,12 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    /**
+     * @Author Ekta
+     * @apiNote This method is for creating order
+     * @param orderRequest
+     * @return OrderDto
+     */
     @PostMapping("/orders")
     public ResponseEntity<OrderDto> createOrder(@Valid @RequestBody CreateOrderRequest orderRequest){
         logger.info("Entering request for creating logger");
@@ -33,6 +39,12 @@ public class OrderController {
         return new ResponseEntity<>(orderDto, HttpStatus.CREATED);
     }
 
+    /**
+     * @Author Ekta
+     * @apiNote This method is for removing order
+     * @param orderId
+     * @return ApiResponse
+     */
     @DeleteMapping("/orders/{orderId}")
     public ResponseEntity<ApiResponse> removeOrder(@PathVariable String orderId){
         logger.info("Entering request for removing order with orderId: {}",orderId);
@@ -43,6 +55,12 @@ public class OrderController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
+    /**
+     * @Author Ekta
+     * @apiNote This method is used to get order of User
+     * @param userId
+     * @return List<OrderDto>
+     */
     @GetMapping("/orders/{userId}")
     public ResponseEntity<List<OrderDto>> getOrdersOfUser(@PathVariable String userId){
         logger.info("Entering request to get order of user with user id: {}",userId);
@@ -52,6 +70,15 @@ public class OrderController {
 
     }
 
+    /**
+     * @Author Ekta
+     * @apiNote This method is for getting all orders
+     * @param pageNo
+     * @param pageSize
+     * @param sortBy
+     * @param sortDir
+     * @return PageableResponse<OrderDto>
+     */
     @GetMapping("/orders")
     public ResponseEntity<PageableResponse<OrderDto>> getOrders(
             @RequestParam(value="pageNo", defaultValue = AppConstants.PAGE_NO, required = false) int pageNo,
