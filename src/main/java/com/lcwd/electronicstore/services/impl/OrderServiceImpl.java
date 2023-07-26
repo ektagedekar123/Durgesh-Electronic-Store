@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto createOrder(CreateOrderRequest orderDto) {
-
+        logger.info("Initiating dao layer to create order");
         String userId = orderDto.getUserId();
         String cartId = orderDto.getCartId();
 
@@ -104,37 +104,38 @@ public class OrderServiceImpl implements OrderService {
 
         //save order
         Order saveOrder = orderRepository.save(order);
-
+        logger.info("Completed dao layer to create order");
         return mapper.map(saveOrder,OrderDto.class);
     }
 
     @Override
     public void removeOrder(String orderId) {
-
+        logger.info("Initiating dao layer to remove order with order id: {}",orderId);
         Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order is not found with id: " + orderId));
         orderRepository.delete(order);
+        logger.info("Completed dao layer to remove order with order id: {}",orderId);
     }
 
     @Override
     public List<OrderDto> getOrdersOfUser(String userId) {
-
+        logger.info("Initiating dao layer to get order of User with user id: {}",userId);
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found in DB!!"));
 
         List<Order> orderList = orderRepository.findByUser(user);
 
         List<OrderDto> orderDtos = orderList.stream().map(order -> mapper.map(order, OrderDto.class)).collect(Collectors.toList());
-
+        logger.info("Completed dao layer to get order of User with user id: {}",userId);
         return orderDtos;
     }
 
     @Override
     public PageableResponse<OrderDto> getOrders(int pageNo, int pageSize, String sortBy, String sortDir) {
-
+        logger.info("Initiating dao layer to get all orders with pageNo {}, pageSize {}, sortBy {}, sortDir {}",pageNo,pageSize,sortBy,sortDir);
         Sort sort = sortDir.equalsIgnoreCase("desc") ? Sort.by(sortBy).descending() : Sort.by(sortBy).ascending();
         Pageable pageable= PageRequest.of(pageNo-1, pageSize, sort);
 
         Page<Order> page = orderRepository.findAll(pageable);
-
+        logger.info("Completed dao layer to get all orders with pageNo {}, pageSize {}, sortBy {}, sortDir {}",pageNo,pageSize,sortBy,sortDir);
         return PageHelper.getPageableResponse(page, OrderDto.class);
     }
 }
