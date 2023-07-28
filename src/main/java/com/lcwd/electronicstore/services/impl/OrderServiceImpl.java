@@ -30,8 +30,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
 
-    @Autowired
-    private OrderItemRepository orderItemRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -39,8 +37,6 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     private CartRepository cartRepository;
 
-    @Autowired
-    private CartItemRepository cartItemRepository;
 
     @Autowired
     private ModelMapper mapper;
