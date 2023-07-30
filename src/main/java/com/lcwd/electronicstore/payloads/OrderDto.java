@@ -3,6 +3,7 @@ package com.lcwd.electronicstore.payloads;
 import com.lcwd.electronicstore.entities.OrderItems;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,7 @@ public class OrderDto extends BaseEntityDto{
     private String paymentStatus="NOTPAID";
 
     private int orderAmount;
+
 
     private String billingAddress;
 
