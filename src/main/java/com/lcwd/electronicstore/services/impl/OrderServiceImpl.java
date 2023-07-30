@@ -143,6 +143,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderStatus(orderDto.getOrderStatus());
         order.setDeliveredDate(new Date());
         order.setPaymentStatus(orderDto.getPaymentStatus());
+        order.setIsActive(orderDto.getIsActive());
 
         Order updatedOrder = orderRepository.save(order);
         logger.info("Completed dao layer to update order with order id: {}",orderId);

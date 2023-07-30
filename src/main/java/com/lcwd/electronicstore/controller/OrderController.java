@@ -93,7 +93,7 @@ public class OrderController {
     }
 
     @PutMapping("/orders/{orderId}")
-    public ResponseEntity<OrderDto> updateOrder(@PathVariable String orderId, @RequestBody OrderDto orderDto){
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable String orderId, @Valid @RequestBody OrderDto orderDto){
         logger.info("Entering request for updating order with order id: {}",orderId);
         OrderDto updateOrder = orderService.updateOrder(orderId, orderDto);
         logger.info("Completed request for updating order with order id: {}", orderId);
