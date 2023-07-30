@@ -134,4 +134,18 @@ public class OrderServiceImpl implements OrderService {
         logger.info("Completed dao layer to get all orders with pageNo {}, pageSize {}, sortBy {}, sortDir {}",pageNo,pageSize,sortBy,sortDir);
         return PageHelper.getPageableResponse(page, OrderDto.class);
     }
+
+    @Override
+    public OrderDto updateOrder(String orderId, OrderDto orderDto) {
+        logger.info("Initiating dao layer to update order with order id: {}",orderId);
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ResourceNotFoundException("Order not found in DB!!"));
+
+        order.setOrderStatus(orderDto.getOrderStatus());
+        order.setDeliveredDate(new Date());
+        order.setPaymentStatus(orderDto.getPaymentStatus());
+
+        Order updatedOrder = orderRepository.save(order);
+        logger.info("Completed dao layer to update order with order id: {}",orderId);
+        return mapper.map(updatedOrder, OrderDto.class);
+    }
 }
