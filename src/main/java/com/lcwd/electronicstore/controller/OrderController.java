@@ -1,5 +1,6 @@
 package com.lcwd.electronicstore.controller;
 
+import com.lcwd.electronicstore.entities.Order;
 import com.lcwd.electronicstore.helper.AppConstants;
 import com.lcwd.electronicstore.payloads.ApiResponse;
 import com.lcwd.electronicstore.payloads.CreateOrderRequest;
@@ -89,5 +90,13 @@ public class OrderController {
         PageableResponse<OrderDto> pageableResponse = orderService.getOrders(pageNo, pageSize, sortBy, sortDir);
         logger.info("Completed request to get All orders with pageNO {}, pageSize {}, sortBy {}, sortDir {}",pageNo,pageSize,sortBy,sortDir);
         return new ResponseEntity<>(pageableResponse, HttpStatus.OK);
+    }
+
+    @PutMapping("/orders/{orderId}")
+    public ResponseEntity<OrderDto> updateOrder(@PathVariable String orderId, @RequestBody OrderDto orderDto){
+        logger.info("Entering request for updating order with order id: {}",orderId);
+        OrderDto updateOrder = orderService.updateOrder(orderId, orderDto);
+        logger.info("Completed request for updating order with order id: {}", orderId);
+        return new ResponseEntity<>(updateOrder, HttpStatus.OK);
     }
 }
