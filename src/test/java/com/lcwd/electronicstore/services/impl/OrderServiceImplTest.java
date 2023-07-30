@@ -19,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.*;
 
@@ -231,5 +232,26 @@ class OrderServiceImplTest {
         Assertions.assertNotNull(pageableResponse);
         Assertions.assertEquals(2, pageableResponse.getPageSize());
         Assertions.assertEquals(page.getTotalElements(), pageableResponse.getContent().size());
+    }
+    @Test
+    public void updateOrderTest(){
+
+        String orderId="tyy567";
+
+        OrderDto orderDto = OrderDto.builder()
+                .orderStatus("DELIVERED")
+                .deliveredDate(new Date())
+                .paymentStatus("PAID")
+                .build();
+
+        Mockito.when(orderRepository.findById(orderId)).thenReturn(Optional.of(order));
+        Mockito.when(orderRepository.save(Mockito.any())).thenReturn(order);
+
+        OrderDto updateOrder = orderService.updateOrder(orderId, orderDto);
+
+        Assertions.assertNotNull(updateOrder);
+        Assertions.assertEquals("PAID", updateOrder.getPaymentStatus());
+        Assertions.assertEquals(order.getBillingName(), updateOrder.getBillingName());
+        Assertions.assertThrows(ResourceNotFoundException.class, ()-> orderService.updateOrder("234w", this.mapper.map(order, OrderDto.class)));
     }
 }

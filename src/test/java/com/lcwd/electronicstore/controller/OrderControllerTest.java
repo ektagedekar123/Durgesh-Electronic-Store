@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -153,5 +154,21 @@ class OrderControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk());
 
+    }
+
+    @Test
+    public void updateOrder() throws Exception {
+
+        String orderId="tyy567";
+
+        Mockito.when(orderService.updateOrder(Mockito.anyString(), Mockito.any())).thenReturn(orderDto);
+
+        this.mockMvc.perform(MockMvcRequestBuilders.put("/orderapi/orders/"+orderId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(convertObjectToJsonString(orderDto))
+                .accept(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.paymentStatus").exists());
     }
 }
