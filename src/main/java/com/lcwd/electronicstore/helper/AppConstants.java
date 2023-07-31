@@ -14,6 +14,8 @@ public class AppConstants {
 
     public static final String SORT_ByTitle= "title";
 
+    public static final String SORT_BYOrderedDate= "orderedDate";
+
     public static final String SORT_DIR= "asc";
 
     public static final String FILE_UPLOADED= "File uploaded successfully";

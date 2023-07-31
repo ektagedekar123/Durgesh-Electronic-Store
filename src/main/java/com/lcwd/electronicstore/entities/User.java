@@ -2,10 +2,10 @@ package com.lcwd.electronicstore.entities;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
 @Setter
 @Getter
 @NoArgsConstructor
@@ -35,6 +35,8 @@ public class User extends BaseEntity{
     @Column(name = "user_image_name")
     private String imagename;
 
+    @OneToMany(mappedBy = "user", fetch= FetchType.LAZY, cascade= CascadeType.REMOVE)
+    private List<Order> orders=new ArrayList<>();
 
 
 }
