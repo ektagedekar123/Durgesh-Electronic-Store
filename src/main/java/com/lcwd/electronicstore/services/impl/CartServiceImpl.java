@@ -18,10 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -62,9 +59,11 @@ public class CartServiceImpl implements CartService {
         // fetch the user from DB
         User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found in DB!!"));
 
+        //Case 1: If cart of User is available, fetch cart of User & add items &
+       //Case 2: if Cart is not available, craete Cart & add items
         Cart cart= null;
         try {
-            cart = cartRepository.findByUser(user).get();
+            cart = cartRepository.findByUser(user).get();   // If Cart of user is not availble, then get() method throws NoSuchElementException, so we used try-catch
         }catch(NoSuchElementException e){
             cart=new Cart();
             cart.setCartId(UUID.randomUUID().toString());
@@ -88,7 +87,8 @@ public class CartServiceImpl implements CartService {
             return item;
         }).collect(Collectors.toList());
 
-        cart.setItems(updatedItems);
+ //       cart.setItems(updatedItems);   //this line of durgesh code not work becoz of combination of annotations cascadeType.All & orphanRemoval=true
+        cart.getItems().addAll(updatedItems);
 
 
         // create item
@@ -100,7 +100,8 @@ public class CartServiceImpl implements CartService {
                     .product(product)
                     .build();
 
-            cart.getItems().add(cartItem);
+           cart.getItems().add(cartItem);
+
         }
 
         cart.setUser(user);
@@ -108,7 +109,7 @@ public class CartServiceImpl implements CartService {
         cart.setLastModifiedBy(request.getLastModifiedBy());
         cart.setIsActive(request.getIsActive());
 
-        Cart updatedCart = cartRepository.save(cart);
+        Cart updatedCart = cartRepository.save(cart);  // When Cart is updated, CartItem is also updated automatically, becoz we applied CascadeType.ALL
         log.info("Completed dao layer for adding cart item in cart with user id {}",userId);
         return this.modelMapper.map(updatedCart, CartDto.class);
     }
