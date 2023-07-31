@@ -32,7 +32,7 @@ public class CartController {
         logger.info("Entering request for adding Cart item in Cart with userId {}",userId);
         CartDto cartDto = cartService.addItemToCart(userId, request);
         logger.info("Completed request for adding Cart item in Cart with userId {}",userId);
-        return new ResponseEntity<>(cartDto, HttpStatus.OK);
+        return new ResponseEntity<>(cartDto, HttpStatus.CREATED);
     }
 
 
@@ -70,7 +70,7 @@ public class CartController {
         cartService.clearCart(userId);
 
         ApiResponse response = ApiResponse.builder()
-                .message("All items are removed from cart & Not Card is Blank !!")
+                .message("All items are removed from cart, Now Card is Blank !!")
                 .success(true)
                 .status(HttpStatus.OK)
                 .build();

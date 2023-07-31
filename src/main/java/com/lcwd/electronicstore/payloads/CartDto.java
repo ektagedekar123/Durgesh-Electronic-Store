@@ -12,7 +12,7 @@ import java.util.List;
 @Setter
 @Getter
 @Builder
-public class CartDto {
+public class CartDto extends BaseEntityDto{
 
     private String cartId;
 
@@ -20,5 +20,5 @@ public class CartDto {
     private UserDto user;
 
 
-    private List<CartItemDto> list=new ArrayList<>();
+    private List<CartItemDto> items=new ArrayList<>();
 }
